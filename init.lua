@@ -364,6 +364,11 @@ require('lazy').setup({
             require('telescope.themes').get_dropdown(),
           },
         },
+        pickers = {
+          lsp_references = {
+            fname_width = 100
+          }
+        }
       }
 
       -- Enable Telescope extensions if they are installed
@@ -565,6 +570,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+        omnisharp = {},
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
@@ -575,7 +581,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
+        tsserver = {},
         --
 
         lua_ls = {
@@ -791,6 +797,14 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'tpope/vim-fugitive',
+  },
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+  },
+
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -910,3 +924,36 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- My stuff
+
+-- Shortcut to open init.lua
+function openInit()
+  vim.cmd("edit $MYVIMRC")
+end
+
+vim.keymap.set('n', '<leader>oi', ':lua openInit()<CR>')
+
+vim.opt.relativenumber = true
+
+-- Copy current filename
+vim.keymap.set('n', '<leader>cf',':lua vim.cmd("let @+ = expand(\'%:p\')")<CR>');
+
+-- Move lines up or down
+vim.keymap.set('n', "<A-j>", "+1<CR>")
+vim.keymap.set('n', "<A-k>", "-2<CR>")
+
+-- Terminal
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>');
+vim.cmd("set shell=powershell.exe");
+
+-- Navigating Splits
+vim.keymap.set('t', '<C-j>', '<C-\\><C-n><C-w>j');
+vim.keymap.set('t', '<C-k>', '<C-\\><C-n><C-w>k');
+vim.keymap.set('t', '<C-h>', '<C-\\><C-n><C-w>h');
+vim.keymap.set('t', '<C-l>', '<C-\\><C-n><C-w>l');
+
+-- Type Ctl-V before the abbreviation to stop it from being substituted
+vim.cmd("ab k8sservices az aks get-credentials --resource-group k8s-services --name k8s-services --overwrite-existing --public-fqdn");
+vim.cmd("abbreviate k8sinternal az aks get-credentials --resource-group k8s-internal --name k8s-internal --overwrite-existing --public-fqdn");
+
