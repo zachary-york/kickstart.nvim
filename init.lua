@@ -385,6 +385,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
+
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
@@ -645,7 +646,7 @@ require('lazy').setup({
       },
     },
     opts = {
-      notify_on_error = false,
+      notify_on_error = true,
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
@@ -663,7 +664,10 @@ require('lazy').setup({
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
+--         javascript = { 'prettier' },
+--         typescript = { 'prettier' },
+--         javascriptreact = { 'prettier' },
+--         typescriptreact =  {'prettier'} ,
       },
     },
   },
@@ -897,9 +901,9 @@ require('lazy').setup({
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  -- Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
+  --   For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -928,11 +932,11 @@ require('lazy').setup({
 -- My stuff
 
 -- Shortcut to open init.lua
-function openInit()
+function OpenInit()
   vim.cmd("edit $MYVIMRC")
 end
 
-vim.keymap.set('n', '<leader>oi', ':lua openInit()<CR>')
+vim.keymap.set('n', '<leader>oi', ':lua OpenInit()<CR>')
 
 vim.opt.relativenumber = true
 
@@ -957,3 +961,10 @@ vim.keymap.set('t', '<C-l>', '<C-\\><C-n><C-w>l');
 vim.cmd("ab k8sservices az aks get-credentials --resource-group k8s-services --name k8s-services --overwrite-existing --public-fqdn");
 vim.cmd("abbreviate k8sinternal az aks get-credentials --resource-group k8s-internal --name k8s-internal --overwrite-existing --public-fqdn");
 
+-- prettier config
+vim.g.neoformat_try_node_exe = 1
+vim.g.neoformat_verbose = 1
+--vim.api.nvim_create_autocmd('BufWritePre', { pattern = {'*.tsx', '*.ts', '*.js', '*.jsx'}, command = 'Neoformat' })
+
+-- Recognize all file formats so neovim stops creating a crazy git diff when nothing has actually changed
+vim.opt.fileformats = "unix,dos,mac"
